@@ -44,8 +44,6 @@ char get_user_from_db(std::string&& name, Json::Value& body) {
 	reader.parse(buffer, ans);
 
 	body = ans["body"];
-	std::string a = body["id"].asCString();
-	std::cout << "Name: " << a << '\n';
 
 	
 	return ans["code"].asInt();
@@ -63,10 +61,10 @@ int main(){
 
 	std::cout << root << "\n";*/
 
-	Player plr("ad", 12, 34);
+	/*Player plr("ad", 12, 34);
 	send_user_to_db(plr);
 	Json::Value b;
 	get_user_from_db("ad", b);
-	std::cout << b;
+	std::cout << b;*/
 	//Player p;
 }
