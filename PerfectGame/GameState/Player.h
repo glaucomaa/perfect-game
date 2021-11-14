@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "..\PerfectGameClient\UdpSocket.h"
+#include "../DataBaseConnector/include/json/json.h"
 
 enum class PlayerStatus { Active, NotActive };
 typedef unsigned char GameIdx;
@@ -17,6 +18,11 @@ private:
     PlayerStatus _status;
 public:
     std::shared_ptr<UdpSocket> _sock;
+    void get_info(Json::Value& info) {
+        info["id"] = _name;
+        info["x"] = _x;
+        info["y"] = _y;
+    }
 
     Player( std::string const& name,
             GameIdx x,
