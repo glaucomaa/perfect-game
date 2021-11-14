@@ -79,6 +79,11 @@ void GameState::addPlayer(std::string const& name, std::shared_ptr<UdpSocket> so
     );
 }
 
+void GameState::addPlayer(Json::Value& info, std::shared_ptr<UdpSocket> sock)
+{
+    this->addPlayer(info["id"].asCString(), sock, info["x"].asInt(), info["y"].asInt());
+}
+
 Player* GameState::getPlayer(std::string const& name)
 {
     auto player_itr = _players.find(name);

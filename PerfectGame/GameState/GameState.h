@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <string>
 #include "Player.h"
+#include "../DataBaseConnector/include/json/json.h"
 
 class GameState
 {  
@@ -24,6 +25,8 @@ public:
                     std::shared_ptr<UdpSocket> sock,
                     GameIdx x,
                     GameIdx y);
+    void addPlayer( Json::Value& info, 
+                    std::shared_ptr<UdpSocket> sock);
     Player* getPlayer(std::string const& name);
     void incrementAll();
     void sendAll();
