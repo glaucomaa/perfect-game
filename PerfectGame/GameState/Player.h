@@ -19,7 +19,7 @@ private:
 public:
     std::shared_ptr<UdpSocket> _sock;
     void get_info(Json::Value& info) {
-        info["id"] = _name;
+        info["user_name"] = _name;
         info["x"] = _x;
         info["y"] = _y;
     }
@@ -61,7 +61,7 @@ public:
         return _status;
     }
 
-    void incrementLossCounter()
+     void incrementLossCounter()
     {
         if (_status == PlayerStatus::NotActive)
             return;

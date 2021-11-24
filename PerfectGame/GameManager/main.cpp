@@ -2,6 +2,7 @@
 #include <chrono>
 #include "..\GameState\GameState.h"
 #include "..\PerfectGameClient\UdpSocket.h"
+#include "..\DataBaseConnector\db.cpp"
 
 // Winsock Library
 #pragma comment(lib,"ws2_32.lib")
@@ -80,12 +81,23 @@ int main()
 				player_name = std::string(buf);
 				std::cout << "Received data : " << player_name << "\n";
 				Player* player_ptr;
-				//TODO: what about socket if player re-enters
-				if ((player_ptr = game.getPlayer(player_name)) == nullptr)
-					game.addPlayer(player_name, sock, kDefX, kDefY);
+				//TODO: what about socket if player re-enters -- DONE!
+				if ((player_ptr = game.getPlayer(player_name)) == nullptr) {
+					statusCode status_code;
+					Json::Value ans;
+					get_user_from_db(status_code, move(player_name), ans);
+					if (status_code == 404) {
+						game.addPlayer(player_name, sock, kDefX, kDefY);
+					}
+					else if (status_code == 200) {
+						game.addPlayer(ans, sock);
+					}
+					
+				}
 				else
 				{
-					if (player_ptr->getStatus() == PlayerStatus::NotActive)
+					//std::cout << player_ptr->getPos().first << player_ptr->getPos().second;
+					/*if (player_ptr->getStatus() == PlayerStatus::NotActive)
 						player_ptr->activate();
 					else
 					{
@@ -94,7 +106,13 @@ int main()
 						GameIdx x = buf[str_sz + 1];
 						GameIdx y = buf[str_sz + 2];
 						player_ptr->updatePos(x, y);
-					}
+					}*/
+					
+					player_ptr->resetLossCounter();
+					size_t str_sz = player_name.length();
+					GameIdx x = buf[str_sz + 1];
+					GameIdx y = buf[str_sz + 2];
+					player_ptr->updatePos(x, y);
 				}
 				break;
 			}
@@ -103,6 +121,7 @@ int main()
 				std::cout << "Socket recv error : " << err.what() << "\n";
 			}
 		}
+		std::cout << "";
 		game.sendAll();
 	}
 

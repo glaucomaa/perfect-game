@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "../DataBaseConnector/db.cpp"
 
 GameState::GameState() : _rows(4), _cols(8)
 {
@@ -81,7 +82,8 @@ void GameState::addPlayer(std::string const& name, std::shared_ptr<UdpSocket> so
 
 void GameState::addPlayer(Json::Value& info, std::shared_ptr<UdpSocket> sock)
 {
-    this->addPlayer(info["id"].asCString(), sock, info["x"].asInt(), info["y"].asInt());
+    std::string name = info["user_name"].asCString();
+    this->addPlayer(name, sock, info["x"].asInt(), info["y"].asInt());
 }
 
 Player* GameState::getPlayer(std::string const& name)
@@ -98,6 +100,12 @@ void GameState::incrementAll()
     {
         auto& player = map_pair.second;
         player.incrementLossCounter();
+        if (player.getStatus() == PlayerStatus::NotActive) {
+            statusCode status_code;
+            send_user_to_db(status_code, player);
+            std::cout << "post";
+            //_players.erase(player.getName());
+        }
     }
 }
 
