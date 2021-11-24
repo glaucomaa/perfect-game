@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "../DataBaseConnector/db.cpp"
 
 GameState::GameState() : _rows(4), _cols(8)
 {
