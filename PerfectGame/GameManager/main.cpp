@@ -121,7 +121,7 @@ int main()
 				std::cout << "Socket recv error : " << err.what() << "\n";
 			}
 		}
-		std::cout << "";
+		std::cout << ""; // PLS DONT DELETE
 		game.sendAll();
 	}
 

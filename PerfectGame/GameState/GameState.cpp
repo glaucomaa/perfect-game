@@ -95,7 +95,8 @@ Player* GameState::getPlayer(std::string const& name)
 }
 
 void GameState::incrementAll()
-{
+{   
+    std::vector<std::string> names;
     for (auto& map_pair : _players)
     {
         auto& player = map_pair.second;
@@ -104,9 +105,14 @@ void GameState::incrementAll()
             statusCode status_code;
             send_user_to_db(status_code, player);
             std::cout << "post";
-            //_players.erase(player.getName());
+            names.push_back(player.getName());
         }
     }
+    for (auto& el : names)
+    {
+        _players.erase(el);
+    }
+
 }
 
 void GameState::sendAll()
